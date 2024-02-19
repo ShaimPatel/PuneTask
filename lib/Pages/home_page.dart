@@ -21,9 +21,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     Utils.toastMessage("Swipe the card Right to Left for Delete the record");
-
     super.initState();
-
     _scrollController.addListener(() {
       if (_scrollController.position.userScrollDirection ==
           ScrollDirection.reverse) {
@@ -97,9 +95,7 @@ class _HomePageState extends State<HomePage> {
             : null,
         body: Consumer<EmployeeProvider>(
           builder: (context, employeeProvider, _) {
-            // Fetch data from API and store in database if database is empty
-            employeeProvider.fetchDataFromDatabase();
-            // Fetch data from database
+            employeeProvider.fetchDataFromAPIAndStoreInDatabase();
             if (employeeProvider.isDatabaseEmpty) {
               final employeePro =
                   Provider.of<EmployeeProvider>(context, listen: false);
@@ -110,13 +106,14 @@ class _HomePageState extends State<HomePage> {
                 child: CircularProgressIndicator(),
               );
             } else {
+              employeeProvider.fetchDataFromDatabase();
               return ListView.builder(
                 physics: const BouncingScrollPhysics(),
                 scrollDirection: Axis.vertical,
                 controller: _scrollController,
-                itemCount: employeeProvider.employees.length,
+                itemCount: employeeProvider.employeesList.length,
                 itemBuilder: (context, index) {
-                  final employee = employeeProvider.employees[index];
+                  final employee = employeeProvider.employeesList[index];
                   return Dismissible(
                     direction: DismissDirection.endToStart,
                     key: Key(employee.id.toString()),
@@ -124,7 +121,7 @@ class _HomePageState extends State<HomePage> {
                       // Delete the item when dismissed
                       employeeProvider.deleteEmployee(employee.id!);
                       setState(() {
-                        employeeProvider.employees.removeAt(index);
+                        employeeProvider.employeesList.removeAt(index);
                       });
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
@@ -149,7 +146,7 @@ class _HomePageState extends State<HomePage> {
                           duration: const Duration(seconds: 1),
                         ),
                       );
-                      //? Check if all records are deleted, then fetch data from the server again
+                      //! Check if all records are deleted, then fetch data from the server again
                       if (employeeProvider.isDatabaseEmpty) {
                         employeeProvider.fetchDataFromAPIAndStoreInDatabase();
                       }

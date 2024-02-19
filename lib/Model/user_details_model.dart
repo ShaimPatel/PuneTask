@@ -1,7 +1,7 @@
 class EmployeeDetailsModel {
   int? id;
   String? employeeName;
-  double? employeeSalary;
+  int? employeeSalary;
   int? employeeAge;
   String? profileImage;
 

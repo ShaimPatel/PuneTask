@@ -1,15 +1,15 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:pune_task/Provider/employee_provider.dart';
 
+import '../Provider/employee_provider.dart';
 import '../Res/Utils/utils.dart';
 
 // ignore: must_be_immutable
 class EmployeeDataUpdatePage extends StatefulWidget {
   int id;
   String name;
-  double salary;
+  int salary;
   int age;
 
   EmployeeDataUpdatePage({
@@ -96,10 +96,10 @@ class _EmployeeDataUpdatePageState extends State<EmployeeDataUpdatePage> {
                               .updateEmployee(
                                   nameController.text.trim(),
                                   int.parse(ageController.text.trim()),
-                                  double.parse(salaryController.text.trim()),
+                                  int.parse(salaryController.text.trim()),
                                   widget.id);
                           Utils.toastMessage(
-                              "Employee Details Updated Successfully");
+                              "Employee ${widget.id}Details Updated Successfully");
                           Navigator.pop(context);
                         }
                       },
